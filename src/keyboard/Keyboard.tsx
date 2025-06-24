@@ -30,12 +30,17 @@ function rotateArray<T>(arr: T[], start: string): T[] {
 type KeyboardProps = {
   scaleNotes: string[];
   rootNote?: string;
+  rotate?: boolean;
 };
 
-export default function Keyboard({ scaleNotes, rootNote }: KeyboardProps) {
-  // Rotate all notes so that the keyboard starts with the root note
-  const rotatedNotes = rootNote ? rotateArray(ALL_NOTES, rootNote) : ALL_NOTES;
-  // Filter out only the white notes from the rotated notes
+export default function Keyboard({
+  scaleNotes,
+  rootNote,
+  rotate = true,
+}: KeyboardProps) {
+  // rotate the notes if needed
+  const rotatedNotes =
+    rotate && rootNote ? rotateArray(ALL_NOTES, rootNote) : ALL_NOTES;
   const rotatedWhiteNotes = rotatedNotes.filter(n => !n.includes('#'));
 
   // Prepare black keys with their positions relative to white keys

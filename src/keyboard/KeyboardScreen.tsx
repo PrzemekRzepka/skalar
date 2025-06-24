@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { View, Text, StyleSheet, Dimensions } from 'react-native';
+import { View, Text, StyleSheet, Dimensions, Switch } from 'react-native';
 import { Picker } from '@react-native-picker/picker';
 import Keyboard from '@keyboard/Keyboard';
 
@@ -24,6 +24,7 @@ export default function KeyboardScreen() {
   const [selectedScale, setSelectedScale] =
     useState<keyof typeof SCALES>('Major');
   const [selectedRoot, setSelectedRoot] = useState(0);
+  const [rotate, setRotate] = useState(false);
 
   const scaleIntervals = SCALES[selectedScale];
   const rootNote = NOTES[selectedRoot];
@@ -55,7 +56,13 @@ export default function KeyboardScreen() {
           ))}
         </Picker>
       </View>
-      <Keyboard scaleNotes={scaleNotes} rootNote={rootNote} />
+      <View
+        style={{ flexDirection: 'row', alignItems: 'center', marginBottom: 16 }}
+      >
+        <Text style={{ fontSize: 18, marginRight: 8 }}>From Root Note:</Text>
+        <Switch value={rotate} onValueChange={value => setRotate(value)} />
+      </View>
+      <Keyboard scaleNotes={scaleNotes} rootNote={rootNote} rotate={rotate} />
     </View>
   );
 }
