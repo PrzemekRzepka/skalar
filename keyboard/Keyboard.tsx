@@ -3,13 +3,12 @@ import { View, StyleSheet } from 'react-native';
 import WhiteKey from './WhiteKey';
 import BlackKey from './BlackKey';
 
-// Note names for each semitone in an octave
 const NOTES = ['C', 'D', 'E', 'F', 'G', 'A', 'B'];
 const SHARP_NOTES = ['C#', 'D#', 'F#', 'G#', 'A#'];
 
 type KeyboardProps = {
-  scaleNotes: string[]; // e.g. ['C', 'D', 'E', 'F', 'G', 'A', 'B']
-  rootNote?: string; // e.g. 'C'
+  scaleNotes: string[];
+  rootNote?: string;
 };
 
 export default function Keyboard({ scaleNotes, rootNote }: KeyboardProps) {

@@ -12,7 +12,7 @@ type BlackKeyProps = {
   onPress?: (event: GestureResponderEvent) => void;
   style?: ViewStyle;
   selected?: boolean;
-  isRoot?: boolean; // Optional prop to indicate if this key is the root note
+  isRoot?: boolean;
 };
 
 export default function BlackKey({
@@ -20,10 +20,16 @@ export default function BlackKey({
   onPress,
   style,
   selected,
+  isRoot = false,
 }: BlackKeyProps) {
   return (
     <TouchableOpacity
-      style={[styles.blackKey, selected && styles.selectedKey, style]}
+      style={[
+        styles.blackKey,
+        selected && styles.selectedKey,
+        isRoot && styles.rootNote,
+        style,
+      ]}
       onPress={onPress}
       activeOpacity={0.7}
     >
@@ -60,6 +66,14 @@ const styles = StyleSheet.create({
     borderWidth: 2,
     shadowColor: '#2563eb',
     shadowOpacity: 0.2,
+    shadowRadius: 4,
+  },
+  rootNote: {
+    backgroundColor: '#FBBF24',
+    borderColor: '#F59E0B',
+    borderWidth: 2,
+    shadowColor: '#F59E0B',
+    shadowOpacity: 0.3,
     shadowRadius: 4,
   },
 });

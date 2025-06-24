@@ -12,7 +12,7 @@ type WhiteKeyProps = {
   onPress?: (event: GestureResponderEvent) => void;
   style?: ViewStyle;
   selected?: boolean;
-  isRoot?: boolean; // Optional prop to indicate if this key is the root note
+  isRoot?: boolean;
 };
 
 export default function WhiteKey({
