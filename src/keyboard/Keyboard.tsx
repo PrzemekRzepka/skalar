@@ -1,7 +1,7 @@
 import React from 'react';
 import { View, StyleSheet } from 'react-native';
-import WhiteKey from './WhiteKey';
-import BlackKey from './BlackKey';
+import WhiteKey from '@keyboard/WhiteKey';
+import BlackKey from '@keyboard/BlackKey';
 
 const NOTES = ['C', 'D', 'E', 'F', 'G', 'A', 'B'];
 const SHARP_NOTES = ['C#', 'D#', 'F#', 'G#', 'A#'];

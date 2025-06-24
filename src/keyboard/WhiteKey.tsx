@@ -5,6 +5,7 @@ import {
   GestureResponderEvent,
   StyleSheet,
   ViewStyle,
+  View,
 } from 'react-native';
 
 type WhiteKeyProps = {
@@ -23,23 +24,26 @@ export default function WhiteKey({
   isRoot = false,
 }: WhiteKeyProps) {
   return (
-    <TouchableOpacity
-      style={[
-        styles.whiteKey,
-        selected && styles.selectedKey,
-        isRoot && styles.rootNote,
-        style,
-      ]}
-      onPress={onPress}
-      activeOpacity={0.7}
-    >
-      <Text style={styles.label}>{label}</Text>
-    </TouchableOpacity>
+    <View style={[styles.background, isRoot && styles.rootBackground]}>
+      <TouchableOpacity
+        style={[
+          styles.whiteKey,
+          selected && styles.selectedKey,
+          isRoot && styles.rootNote,
+          style,
+        ]}
+        onPress={onPress}
+        activeOpacity={0.7}
+      >
+        <Text style={styles.label}>{label}</Text>
+      </TouchableOpacity>
+    </View>
   );
 }
 
 const styles = StyleSheet.create({
   whiteKey: {
+    left: 0.5,
     backgroundColor: '#fff',
     borderColor: '#d1d5db',
     borderWidth: 1,
@@ -48,10 +52,6 @@ const styles = StyleSheet.create({
     width: 40,
     justifyContent: 'flex-end',
     alignItems: 'center',
-    shadowColor: '#000',
-    shadowOpacity: 0.1,
-    shadowOffset: { width: 0, height: 1 },
-    shadowRadius: 2,
   },
   label: {
     color: '#1f2937',
@@ -61,16 +61,23 @@ const styles = StyleSheet.create({
   selectedKey: {
     backgroundColor: '#ACACAC',
     borderWidth: 2,
-    shadowColor: '#2563eb',
-    shadowOpacity: 0.2,
-    shadowRadius: 4,
+    borderColor: '#1f2937',
   },
   rootNote: {
     backgroundColor: '#FBBF24',
     borderColor: '#F59E0B',
     borderWidth: 2,
-    shadowColor: '#F59E0B',
-    shadowOpacity: 0.3,
-    shadowRadius: 4,
+  },
+  background: {
+    backgroundColor: '#d1d5db',
+    borderRadius: 8,
+    height: 120,
+    width: 40,
+  },
+  rootBackground: {
+    backgroundColor: '#F59E0B',
+    borderRadius: 8,
+    height: 120,
+    width: 40,
   },
 });

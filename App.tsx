@@ -2,7 +2,7 @@ import React from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import KeyboardScreen from './keyboard/KeyboardScreen';
+import KeyboardScreen from './src/keyboard/KeyboardScreen';
 import { View, Text } from 'react-native';
 
 const Stack = createStackNavigator();

@@ -5,6 +5,7 @@ import {
   GestureResponderEvent,
   StyleSheet,
   ViewStyle,
+  View,
 } from 'react-native';
 
 type BlackKeyProps = {
@@ -23,18 +24,20 @@ export default function BlackKey({
   isRoot = false,
 }: BlackKeyProps) {
   return (
-    <TouchableOpacity
-      style={[
-        styles.blackKey,
-        selected && styles.selectedKey,
-        isRoot && styles.rootNote,
-        style,
-      ]}
-      onPress={onPress}
-      activeOpacity={0.7}
-    >
-      {label ? <Text style={styles.label}>{label}</Text> : null}
-    </TouchableOpacity>
+    <View style={[styles.background, isRoot && styles.rootBackground]}>
+      <TouchableOpacity
+        style={[
+          styles.blackKey,
+          selected && styles.selectedKey,
+          isRoot && styles.rootNote,
+          style,
+        ]}
+        onPress={onPress}
+        activeOpacity={0.7}
+      >
+        {label ? <Text style={styles.label}>{label}</Text> : null}
+      </TouchableOpacity>
+    </View>
   );
 }
 
@@ -51,10 +54,6 @@ const styles = StyleSheet.create({
     marginHorizontal: 2,
     position: 'absolute',
     zIndex: 2,
-    shadowColor: '#000',
-    shadowOpacity: 0.3,
-    shadowOffset: { width: 0, height: 2 },
-    shadowRadius: 3,
   },
   label: {
     color: '#FFF',
@@ -64,16 +63,32 @@ const styles = StyleSheet.create({
   selectedKey: {
     backgroundColor: '#BBBBBB',
     borderWidth: 2,
-    shadowColor: '#2563eb',
-    shadowOpacity: 0.2,
-    shadowRadius: 4,
   },
   rootNote: {
     backgroundColor: '#FBBF24',
     borderColor: '#F59E0B',
     borderWidth: 2,
-    shadowColor: '#F59E0B',
-    shadowOpacity: 0.3,
-    shadowRadius: 4,
+  },
+  background: {
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    right: 0,
+    bottom: 0,
+    backgroundColor: '#000',
+    borderRadius: 8,
+    height: 80,
+    width: 28,
+  },
+  rootBackground: {
+    backgroundColor: '#F59E0B',
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    right: 0,
+    bottom: 0,
+    borderRadius: 8,
+    height: 80,
+    width: 28,
   },
 });
