@@ -3,8 +3,29 @@ import { View, StyleSheet } from 'react-native';
 import WhiteKey from '@keyboard/WhiteKey';
 import BlackKey from '@keyboard/BlackKey';
 
-const NOTES = ['C', 'D', 'E', 'F', 'G', 'A', 'B'];
-const SHARP_NOTES = ['C#', 'D#', 'F#', 'G#', 'A#'];
+const ALL_NOTES = [
+  'C',
+  'C#',
+  'D',
+  'D#',
+  'E',
+  'F',
+  'F#',
+  'G',
+  'G#',
+  'A',
+  'A#',
+  'B',
+];
+
+const WHITE_NOTES = ['C', 'D', 'E', 'F', 'G', 'A', 'B'];
+
+// Rotates an array so that it starts with the given note
+function rotateArray<T>(arr: T[], start: string): T[] {
+  const idx = arr.findIndex(n => n === start);
+  if (idx === -1) return arr;
+  return [...arr.slice(idx), ...arr.slice(0, idx)];
+}
 
 type KeyboardProps = {
   scaleNotes: string[];
@@ -12,10 +33,39 @@ type KeyboardProps = {
 };
 
 export default function Keyboard({ scaleNotes, rootNote }: KeyboardProps) {
+  // Rotate all notes so that the keyboard starts with the root note
+  const rotatedNotes = rootNote ? rotateArray(ALL_NOTES, rootNote) : ALL_NOTES;
+  // Filter out only the white notes from the rotated notes
+  const rotatedWhiteNotes = rotatedNotes.filter(n => !n.includes('#'));
+
+  // Prepare black keys with their positions relative to white keys
+  const rotatedBlackKeys: { note: string; pos: number }[] = [];
+  for (let i = 0; i < rotatedWhiteNotes.length; i++) {
+    const currentWhite = rotatedWhiteNotes[i];
+    const idx = rotatedNotes.findIndex(n => n === currentWhite);
+    const maybeBlack = rotatedNotes[idx + 1];
+    // If the next note is a black key, add it with its position
+    if (maybeBlack && maybeBlack.includes('#')) {
+      rotatedBlackKeys.push({
+        note: maybeBlack,
+        pos: i,
+      });
+    }
+  }
+
+  // Handle edge case: black key before the first white key
+  const firstWhiteIdx = rotatedNotes.findIndex(n => n === rotatedWhiteNotes[0]);
+  if (firstWhiteIdx > 0 && rotatedNotes[firstWhiteIdx - 1].includes('#')) {
+    rotatedBlackKeys.unshift({
+      note: rotatedNotes[firstWhiteIdx - 1],
+      pos: -1,
+    });
+  }
+
   return (
     <View style={styles.keyboardContainer}>
       <View style={styles.whiteKeysRow}>
-        {NOTES.map(note => (
+        {rotatedWhiteNotes.map(note => (
           <WhiteKey
             key={note}
             label={note}
@@ -25,12 +75,16 @@ export default function Keyboard({ scaleNotes, rootNote }: KeyboardProps) {
         ))}
       </View>
       <View style={styles.blackKeysRow} pointerEvents="box-none">
-        {SHARP_NOTES.map((note, i) => (
+        {rotatedBlackKeys.map(({ note, pos }) => (
           <View
-            key={i}
+            key={note}
             style={[
               styles.blackKeyWrapper,
-              { left: (i + (i < 2 ? 0 : 1) + 1) * 40 - 15 },
+              { left: pos * 40 + 20 },
+              // Make sure the black key is positioned correctly
+              (pos < 0 || pos >= rotatedWhiteNotes.length - 1) && {
+                opacity: 1,
+              },
             ]}
           >
             <BlackKey
@@ -48,7 +102,7 @@ export default function Keyboard({ scaleNotes, rootNote }: KeyboardProps) {
 const styles = StyleSheet.create({
   keyboardContainer: {
     position: 'relative',
-    width: NOTES.length * 40,
+    width: WHITE_NOTES.length * 40,
     height: 160,
   },
   whiteKeysRow: {
@@ -61,7 +115,6 @@ const styles = StyleSheet.create({
     left: 0,
     height: 100,
     width: '100%',
-    flexDirection: 'row',
     zIndex: 2,
   },
   blackKeyWrapper: {
