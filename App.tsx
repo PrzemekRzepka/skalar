@@ -4,6 +4,8 @@ import { createStackNavigator } from '@react-navigation/stack';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import KeyboardScreen from './src/keyboard/KeyboardScreen';
 import { View, Text } from 'react-native';
+import { Provider } from 'react-redux';
+import { store } from '@store/store';
 
 const Stack = createStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -30,12 +32,36 @@ function KeyboardStack() {
 
 function App(): React.JSX.Element {
   return (
-    <NavigationContainer>
-      <Tab.Navigator>
-        <Tab.Screen name="Scales" component={KeyboardStack} />
-        <Tab.Screen name="Favorites" component={FavoritesScreen} />
-      </Tab.Navigator>
-    </NavigationContainer>
+    <Provider store={store}>
+      <NavigationContainer>
+        <Tab.Navigator
+          screenOptions={{
+            title: 'Skalar',
+            headerTitleAlign: 'center',
+            headerTitleStyle: {
+              fontSize: 24,
+              color: '#fff',
+            },
+            tabBarStyle: {
+              backgroundColor: '#16171c',
+              borderTopWidth: 0,
+              height: '10%',
+            },
+            tabBarActiveTintColor: '#fff',
+            tabBarInactiveTintColor: '#aaa',
+            tabBarLabelStyle: {
+              fontSize: 14,
+              fontWeight: '600',
+            },
+            headerStyle: { backgroundColor: '#16171c' },
+            headerTintColor: '#fff',
+          }}
+        >
+          <Tab.Screen name="Scales" component={KeyboardStack} />
+          <Tab.Screen name="Favorites" component={FavoritesScreen} />
+        </Tab.Navigator>
+      </NavigationContainer>
+    </Provider>
   );
 }
 

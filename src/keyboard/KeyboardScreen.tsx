@@ -1,7 +1,9 @@
 import React, { useState } from 'react';
-import { View, Text, StyleSheet, Dimensions, Switch } from 'react-native';
-import { Picker } from '@react-native-picker/picker';
+import { View, Text, StyleSheet, Switch, TouchableOpacity } from 'react-native';
+import DropDownPicker from 'react-native-dropdown-picker';
 import Keyboard from '@keyboard/Keyboard';
+import { useDispatch } from 'react-redux';
+import Scale, { addScale } from '@store/slices/favoritesScalesSlice';
 
 const NOTES = ['C', 'C#', 'D', 'D#', 'E', 'F', 'F#', 'G', 'G#', 'A', 'A#', 'B'];
 
@@ -20,49 +22,137 @@ const SCALES = {
   Blues: [0, 3, 5, 6, 7, 10],
 };
 
+const darkColors = {
+  background: '#181A20',
+  card: '#23262F',
+  text: '#F4F4F4',
+  accent: '#4F8EF7',
+  border: '#2C2F38',
+  pickerBg: '#23262F',
+  pickerText: '#F4F4F4',
+  switchTrack: '#444B5A',
+  switchThumb: '#4F8EF7',
+};
+
 export default function KeyboardScreen() {
   const [selectedScale, setSelectedScale] =
     useState<keyof typeof SCALES>('Major');
+
   const [selectedRoot, setSelectedRoot] = useState(0);
   const [rotate, setRotate] = useState(false);
+  const [rootOpen, setRootOpen] = useState(false);
+  const [scaleOpen, setScaleOpen] = useState(false);
+
+  const [rootItems, setRootItems] = useState(
+    NOTES.map((note, i) => ({ label: note, value: i })),
+  );
+  const [scaleItems, setScaleItems] = useState(
+    Object.keys(SCALES).map(scale => ({ label: scale, value: scale })),
+  );
 
   const scaleIntervals = SCALES[selectedScale];
   const rootNote = NOTES[selectedRoot];
   const scaleNotes = scaleIntervals.map(i => NOTES[(selectedRoot + i) % 12]);
 
+  const dispatch = useDispatch();
+
   return (
-    <View style={{ flex: 1, padding: 16, alignSelf: 'center' }}>
-      <Text style={{ fontSize: 18, marginBottom: 8 }}>Select Root Note:</Text>
-      <View style={{ marginBottom: 16 }}>
-        <Picker
-          selectedValue={selectedRoot}
-          onValueChange={itemValue => setSelectedRoot(itemValue)}
-        >
-          {NOTES.map((note, i) => (
-            <Picker.Item key={note} label={note} value={i} />
-          ))}
-        </Picker>
+    <View
+      style={[styles.container, { backgroundColor: darkColors.background }]}
+    >
+      <Text style={styles.label}>Select Root Note:</Text>
+      <DropDownPicker
+        open={rootOpen}
+        setOpen={setRootOpen}
+        value={selectedRoot}
+        setValue={val => setSelectedRoot(val)}
+        items={rootItems}
+        setItems={setRootItems}
+        style={styles.dropdown}
+        dropDownContainerStyle={styles.dropdownContainer}
+        textStyle={{ color: darkColors.pickerText }}
+        placeholder="Select Root"
+        listItemLabelStyle={{ color: darkColors.pickerText }}
+        selectedItemLabelStyle={{ color: darkColors.accent }}
+        theme="DARK"
+        zIndex={3000}
+        zIndexInverse={1000}
+      />
+      <Text style={styles.label}>Select Scale:</Text>
+      <DropDownPicker
+        open={scaleOpen}
+        setOpen={setScaleOpen}
+        value={selectedScale}
+        setValue={val => setSelectedScale(val)}
+        items={scaleItems}
+        setItems={setScaleItems}
+        style={styles.dropdown}
+        dropDownContainerStyle={styles.dropdownContainer}
+        textStyle={{ color: darkColors.pickerText }}
+        placeholder="Select Scale"
+        listItemLabelStyle={{ color: darkColors.pickerText }}
+        selectedItemLabelStyle={{ color: darkColors.accent }}
+        theme="DARK"
+        zIndex={2000}
+        zIndexInverse={2000}
+      />
+      <View style={styles.switchRow}>
+        <Text style={styles.label}>From Root Note:</Text>
+        <Switch
+          value={rotate}
+          onValueChange={value => setRotate(value)}
+          trackColor={{
+            false: darkColors.switchTrack,
+            true: darkColors.accent,
+          }}
+          thumbColor={rotate ? darkColors.switchThumb : darkColors.pickerBg}
+        />
       </View>
-      <Text style={{ fontSize: 18, marginBottom: 8 }}>Select Scale:</Text>
-      <View style={{ marginBottom: 16 }}>
-        <Picker
-          selectedValue={selectedScale}
-          onValueChange={itemValue =>
-            setSelectedScale(itemValue as keyof typeof SCALES)
-          }
-        >
-          {Object.keys(SCALES).map(scale => (
-            <Picker.Item key={scale} label={scale} value={scale} />
-          ))}
-        </Picker>
+      <View style={{ width: '100%', alignItems: 'center' }}>
+        <Keyboard scaleNotes={scaleNotes} rootNote={rootNote} rotate={rotate} />
       </View>
-      <View
-        style={{ flexDirection: 'row', alignItems: 'center', marginBottom: 16 }}
+      <TouchableOpacity
+        onPress={() => {
+          dispatch(
+            addScale({
+              name: selectedScale,
+              rootNote: rootNote,
+              scaleNotes: scaleNotes,
+            }),
+          );
+          console.log('Button pressed');
+        }}
       >
-        <Text style={{ fontSize: 18, marginRight: 8 }}>From Root Note:</Text>
-        <Switch value={rotate} onValueChange={value => setRotate(value)} />
-      </View>
-      <Keyboard scaleNotes={scaleNotes} rootNote={rootNote} rotate={rotate} />
+        <Text style={{ color: '#4F8EF7', fontSize: 16 }}>Add to favorites</Text>
+      </TouchableOpacity>
     </View>
   );
 }
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    padding: 16,
+    alignSelf: 'center',
+    width: '100%',
+  },
+  label: {
+    fontSize: 18,
+    marginBottom: 8,
+    color: '#F4F4F4',
+  },
+  dropdown: {
+    backgroundColor: '#23262F',
+    borderColor: '#2C2F38',
+    marginBottom: 16,
+  },
+  dropdownContainer: {
+    backgroundColor: '#23262F',
+    borderColor: '#2C2F38',
+  },
+  switchRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginBottom: 16,
+  },
+});

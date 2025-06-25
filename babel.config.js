@@ -7,6 +7,7 @@ module.exports = {
         root: ['./src'],
         alias: {
           '@keyboard': './src/keyboard',
+          '@store': './src/store',
         },
       },
     ],
