@@ -4,7 +4,8 @@
     "baseUrl": "./src",
     "paths": {
       "@keyboard/*": ["keyboard/*"],
-      "@store/*": ["store/*"]
+      "@store/*": ["store/*"],
+      "@assets/*": ["assets/*"]
     }
   }
 }

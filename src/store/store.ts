@@ -6,3 +6,5 @@ export const store = configureStore({
     favoriteScaleSlice: favoriteScaleSliceReducer,
   },
 });
+
+export type RootState = ReturnType<typeof store.getState>;

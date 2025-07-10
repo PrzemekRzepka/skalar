@@ -1,4 +1,5 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
+import { RootState } from '@store/store';
 
 type Scale = {
   name: string;
@@ -35,5 +36,7 @@ const favoritesScalesSlice = createSlice({
 });
 
 export const { addScale, removeScaleByName } = favoritesScalesSlice.actions;
+
+export const selectScales = (state: RootState) => state.favoriteScaleSlice;
 
 export default favoritesScalesSlice.reducer;

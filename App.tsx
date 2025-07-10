@@ -2,21 +2,14 @@ import React from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import KeyboardScreen from './src/keyboard/KeyboardScreen';
+import KeyboardScreen from './src/scales/KeyboardScreen';
+import FavoriteScreen from './src/favoriteScales/FavoriteScalesScreen';
 import { View, Text } from 'react-native';
 import { Provider } from 'react-redux';
 import { store } from '@store/store';
 
 const Stack = createStackNavigator();
 const Tab = createBottomTabNavigator();
-
-function FavoritesScreen() {
-  return (
-    <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
-      <Text>Favorites</Text>
-    </View>
-  );
-}
 
 function KeyboardStack() {
   return (
@@ -58,7 +51,7 @@ function App(): React.JSX.Element {
           }}
         >
           <Tab.Screen name="Scales" component={KeyboardStack} />
-          <Tab.Screen name="Favorites" component={FavoritesScreen} />
+          <Tab.Screen name="Favorites" component={FavoriteScreen} />
         </Tab.Navigator>
       </NavigationContainer>
     </Provider>

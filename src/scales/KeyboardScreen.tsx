@@ -4,6 +4,11 @@ import DropDownPicker from 'react-native-dropdown-picker';
 import Keyboard from '@keyboard/Keyboard';
 import { useDispatch } from 'react-redux';
 import Scale, { addScale } from '@store/slices/favoritesScalesSlice';
+import { darkColors } from '@assets/Colors';
+
+const SELECT_ROOT_TEXT = 'Select Root Note';
+const SELECT_SCALE_TEXT = 'Select scale';
+const BUTTON_ADD_TEXT = 'Add to favorites';
 
 const NOTES = ['C', 'C#', 'D', 'D#', 'E', 'F', 'F#', 'G', 'G#', 'A', 'A#', 'B'];
 
@@ -20,18 +25,6 @@ const SCALES = {
   PentatonicMajor: [0, 2, 4, 7, 9],
   PentatonicMinor: [0, 3, 5, 7, 10],
   Blues: [0, 3, 5, 6, 7, 10],
-};
-
-const darkColors = {
-  background: '#181A20',
-  card: '#23262F',
-  text: '#F4F4F4',
-  accent: '#4F8EF7',
-  border: '#2C2F38',
-  pickerBg: '#23262F',
-  pickerText: '#F4F4F4',
-  switchTrack: '#444B5A',
-  switchThumb: '#4F8EF7',
 };
 
 export default function KeyboardScreen() {
@@ -71,7 +64,7 @@ export default function KeyboardScreen() {
         style={styles.dropdown}
         dropDownContainerStyle={styles.dropdownContainer}
         textStyle={{ color: darkColors.pickerText }}
-        placeholder="Select Root"
+        placeholder={SELECT_ROOT_TEXT}
         listItemLabelStyle={{ color: darkColors.pickerText }}
         selectedItemLabelStyle={{ color: darkColors.accent }}
         theme="DARK"
@@ -89,7 +82,7 @@ export default function KeyboardScreen() {
         style={styles.dropdown}
         dropDownContainerStyle={styles.dropdownContainer}
         textStyle={{ color: darkColors.pickerText }}
-        placeholder="Select Scale"
+        placeholder={SELECT_SCALE_TEXT}
         listItemLabelStyle={{ color: darkColors.pickerText }}
         selectedItemLabelStyle={{ color: darkColors.accent }}
         theme="DARK"
@@ -108,7 +101,7 @@ export default function KeyboardScreen() {
           thumbColor={rotate ? darkColors.switchThumb : darkColors.pickerBg}
         />
       </View>
-      <View style={{ width: '100%', alignItems: 'center' }}>
+      <View style={styles.keyboardContainer}>
         <Keyboard scaleNotes={scaleNotes} rootNote={rootNote} rotate={rotate} />
       </View>
       <TouchableOpacity
@@ -120,10 +113,9 @@ export default function KeyboardScreen() {
               scaleNotes: scaleNotes,
             }),
           );
-          console.log('Button pressed');
         }}
       >
-        <Text style={{ color: '#4F8EF7', fontSize: 16 }}>Add to favorites</Text>
+        <Text style={styles.button}>{BUTTON_ADD_TEXT}</Text>
       </TouchableOpacity>
     </View>
   );
@@ -135,6 +127,10 @@ const styles = StyleSheet.create({
     padding: 16,
     alignSelf: 'center',
     width: '100%',
+  },
+  keyboardContainer: {
+    width: '100%',
+    alignItems: 'center',
   },
   label: {
     fontSize: 18,
@@ -154,5 +150,9 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     marginBottom: 16,
+  },
+  button: {
+    color: '#4F8EF7',
+    fontSize: 16,
   },
 });
